@@ -1,7 +1,7 @@
 //Create variables here
 var dog, dogImg,dogHappy;
 var database;
-var foodStock;
+var foodStock,foodS;
 
 function preload()
 {
@@ -19,30 +19,40 @@ function setup() {
   dog.scale = 0.25;
   foodStock = database.ref('Food');
   foodStock.on("value",readStock);
+  textSize(20);
 }
 
 
 function draw() {  
   background(0,153,51);
 
+  if(keyWentDown(UP_ARROW)){
+    writeStock(foodS);
+    dog.addImage(dogHappy);
+    }
+
   drawSprites();
-  text("Note:Press Up Arrow Key To Feed Drago Milk!");
-  textSize(30);
-  fill(0);
+  fill(255,255,254);
+  stroke("black");
+  text("Food remaining : "+foodS,170,200);
+  text("Note:Press Up Arrow Key To Feed Drago Milk!",130,10,300,20);
+  
   //add styles here
 
 }
 function readStock(data){
 foodS = data.val();
 }
-function writeStock(x)
-{
+function writeStock(x){
+
+  if(x<=0){
+    x=0;
+  }else{
+    x=x-1;
+  } 
 database.ref('/').update({
   Food:x
 })
 }
 
-if(keyWentDown(UP_ARROW)){
-  writeStock(foodS);
-  dog.addImage(dogHappy);
-  }
+
